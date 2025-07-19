@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TZ: ${TZ:-Asia/Tokyo}
+    volumes:
+      - ..:/workspace:delegated
+      - ~/.ssh:/home/node/.ssh:ro
+      - ~/.gitconfig:/home/node/.gitconfig:ro
+      - vscode-server:/home/node/.vscode-server
+      # Docker in Docker用のソケット共有
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=4096
+      - CLAUDE_CONFIG_DIR=/home/node/.claude
+      - POWERLEVEL9K_DISABLE_GITSTATUS=true
+      # MariaDB接続情報
+      - DATABASE_URL=mysql://discord_user:discord_pass@db:3306/discord_learning
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    command: sleep infinity
+    networks:
+      - discord-learning-network
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: discord_learning
+      MYSQL_USER: discord_user
+      MYSQL_PASSWORD: discord_pass
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    networks:
+      - discord-learning-network
+
+volumes:
+  vscode-server:
+  mariadb-data:
+
+networks:
+  discord-learning-network:
+    driver: bridge

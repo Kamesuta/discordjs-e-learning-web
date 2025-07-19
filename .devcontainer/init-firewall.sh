@@ -59,7 +59,10 @@ for domain in \
     "statsig.com" \
     "discord.com" \
     "discord.gg" \
-    "discord.media"; do
+    "discord.media" \
+    "gateway.discord.gg" \
+    "cdn.discordapp.com" \
+    "discordapp.com"; do
     echo "Resolving $domain..."
     ips=$(dig +short A "$domain")
     if [ -z "$ips" ]; then
