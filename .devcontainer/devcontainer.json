@@ -6,16 +6,19 @@
       "TZ": "${localEnv:TZ:America/Los_Angeles}"
     }
   },
-  "runArgs": [
-    "--cap-add=NET_ADMIN",
-    "--cap-add=NET_RAW"
-  ],
+  "runArgs": ["--cap-add=NET_ADMIN", "--cap-add=NET_RAW"],
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
   "customizations": {
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "anthropic.claude-code",
+        "mhutchie.git-graph"
       ],
       "settings": {
         "editor.formatOnSave": true,
@@ -32,7 +35,8 @@
           "zsh": {
             "path": "zsh"
           }
-        }
+        },
+        "git.enableCommitSigning": false
       }
     }
   },
@@ -48,5 +52,5 @@
   },
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "sudo /usr/local/bin/init-firewall.sh"
+  "postCreateCommand": "sudo /usr/local/bin/start-services.sh && sudo /usr/local/bin/init-firewall.sh"
 }
