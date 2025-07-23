@@ -1,7 +1,7 @@
 {
   "name": "Claude Code Sandbox",
   "dockerComposeFile": "docker-compose.yml",
-  "service": "app",
+  "service": "node",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/git:1": {}
@@ -36,11 +36,6 @@
     }
   },
   "remoteUser": "node",
-  "mounts": [
-    "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
-    "source=claude-code-config-${devcontainerId},target=/home/node/.claude,type=volume"
-  ],
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
   "workspaceFolder": "/workspace",
   "postCreateCommand": "sudo /usr/local/bin/init-firewall.sh"
 }

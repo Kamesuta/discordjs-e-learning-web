@@ -1,17 +1,19 @@
 version: '3.8'
 
 services:
-  app:
+  node:
     build:
       context: .
       dockerfile: Dockerfile
       args:
         TZ: ${TZ:-Asia/Tokyo}
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     volumes:
-      - ..:/workspace:delegated
-      - ~/.ssh:/home/node/.ssh:ro
-      - ~/.gitconfig:/home/node/.gitconfig:ro
-      - vscode-server:/home/node/.vscode-server
+      - claude-code-bashhistory:/commandhistory
+      - claude-code-config:/home/node/.claude
+      - ../:/workspace:delegated
       # Docker in Docker用のソケット共有
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
@@ -20,10 +22,8 @@ services:
       - POWERLEVEL9K_DISABLE_GITSTATUS=true
       # MariaDB接続情報
       - DATABASE_URL=mysql://discord_user:discord_pass@db:3306/discord_learning
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
-    command: sleep infinity
+    working_dir: /workspace
+    tty: true
     networks:
       - discord-learning-network
     depends_on:
@@ -45,7 +45,8 @@ services:
       - discord-learning-network
 
 volumes:
-  vscode-server:
+  claude-code-bashhistory:
+  claude-code-config:
   mariadb-data:
 
 networks:
