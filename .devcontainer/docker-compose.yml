@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        TZ: ${TZ:-Asia/Tokyo}
+        - TZ=${TZ:-America/Los_Angeles}
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -20,8 +20,6 @@ services:
       - NODE_OPTIONS=--max-old-space-size=4096
       - CLAUDE_CONFIG_DIR=/home/node/.claude
       - POWERLEVEL9K_DISABLE_GITSTATUS=true
-      # MariaDB接続情報
-      - DATABASE_URL=mysql://discord_user:discord_pass@db:3306/discord_learning
     working_dir: /workspace
     tty: true
     networks:

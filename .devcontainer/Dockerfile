@@ -19,7 +19,8 @@ RUN apt update && apt install -y less \
   iproute2 \
   dnsutils \
   aggregate \
-  jq
+  jq \
+  mariadb-client
 
 # Ensure default node user has access to /usr/local/share
 RUN mkdir -p /usr/local/share/npm-global && \
@@ -68,11 +69,3 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 
 # Install Claude
 RUN npm install -g @anthropic-ai/claude-code
-
-# Copy and set up firewall script
-COPY init-firewall.sh /usr/local/bin/
-USER root
-RUN chmod +x /usr/local/bin/init-firewall.sh && \
-  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
-  chmod 0440 /etc/sudoers.d/node-firewall
-USER node

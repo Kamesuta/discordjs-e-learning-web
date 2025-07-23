@@ -36,6 +36,5 @@
     }
   },
   "remoteUser": "node",
-  "workspaceFolder": "/workspace",
-  "postCreateCommand": "sudo /usr/local/bin/init-firewall.sh"
+  "workspaceFolder": "/workspace"
 }
